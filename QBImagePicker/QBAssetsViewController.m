@@ -443,6 +443,11 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     QBAssetCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"AssetCell" forIndexPath:indexPath];
     cell.tag = indexPath.item;
     cell.showsOverlayViewWhenSelected = self.imagePickerController.allowsMultipleSelection;
+    if (self.imagePickerController.showsOrderOfSelectedAssets) {
+        cell.overlayViewType = QBOverlayViewTypeOrder;
+    } else {
+        cell.overlayViewType = QBOverlayViewTypeCheckmark;
+    }
     
     // Image
     PHAsset *asset = self.fetchResult[indexPath.item];
@@ -480,8 +485,10 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }
     
     // Selection state
-    if ([self.imagePickerController.selectedAssets containsObject:asset]) {
+    NSMutableOrderedSet *selectedAssets = self.imagePickerController.selectedAssets;
+    if ([selectedAssets containsObject:asset]) {
         [cell setSelected:YES];
+        cell.order = [selectedAssets indexOfObject:asset] + 1;
         [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
     }
     
@@ -597,6 +604,10 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
                 [self.navigationController setToolbarHidden:NO animated:YES];
             }
         }
+
+        if (imagePickerController.showsOrderOfSelectedAssets) {
+            [collectionView reloadItemsAtIndexPaths:collectionView.indexPathsForSelectedItems];
+        }
     } else {
         if ([imagePickerController.delegate respondsToSelector:@selector(qb_imagePickerController:didFinishPickingAssets:)]) {
             [imagePickerController.delegate qb_imagePickerController:imagePickerController didFinishPickingAssets:@[asset]];
@@ -634,7 +645,11 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             [self.navigationController setToolbarHidden:YES animated:YES];
         }
     }
-    
+
+    if (imagePickerController.showsOrderOfSelectedAssets) {
+        [collectionView reloadItemsAtIndexPaths:collectionView.indexPathsForSelectedItems];
+    }
+
     if ([imagePickerController.delegate respondsToSelector:@selector(qb_imagePickerController:didDeselectAsset:)]) {
         [imagePickerController.delegate qb_imagePickerController:imagePickerController didDeselectAsset:asset];
     }

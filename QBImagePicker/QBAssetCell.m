@@ -10,7 +10,7 @@
 
 @interface QBAssetCell ()
 
-@property (weak, nonatomic) IBOutlet UIView *overlayView;
+@property (weak, nonatomic) IBOutlet QBOverlayView *overlayView;
 
 @end
 
@@ -22,6 +22,16 @@
     
     // Show/hide overlay view
     self.overlayView.hidden = !(selected && self.showsOverlayViewWhenSelected);
+}
+
+- (void)setOverlayViewType:(QBOverlayViewType)overlayViewType {
+    self.overlayView.type = overlayViewType;
+}
+
+- (void)setOrder:(NSInteger)order {
+    _order = order;
+
+    self.overlayView.orderView.order = order;
 }
 
 @end

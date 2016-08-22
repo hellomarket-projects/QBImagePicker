@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QBOverlayView.h"
 
 @class QBVideoIndicatorView;
 
@@ -16,5 +17,8 @@
 @property (weak, nonatomic) IBOutlet QBVideoIndicatorView *videoIndicatorView;
 
 @property (nonatomic, assign) BOOL showsOverlayViewWhenSelected;
+@property (nonatomic, assign) QBOverlayViewType overlayViewType;
+
+@property (nonatomic, assign) NSInteger order;
 
 @end

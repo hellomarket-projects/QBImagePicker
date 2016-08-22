@@ -50,6 +50,10 @@
                 imagePickerController.maximumNumberOfSelection = 2;
                 [imagePickerController.selectedAssets addObject:[PHAsset fetchAssetsWithOptions:nil].lastObject];
                 break;
+
+            case 5:
+                imagePickerController.showsOrderOfSelectedAssets = YES;
+                break;
                 
             default:
                 break;

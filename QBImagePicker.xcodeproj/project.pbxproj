@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		695C773C1D6AF0EC00B34B01 /* QBOrderView.h in Headers */ = {isa = PBXBuildFile; fileRef = 695C773A1D6AF0EC00B34B01 /* QBOrderView.h */; };
+		695C773D1D6AF0EC00B34B01 /* QBOrderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 695C773B1D6AF0EC00B34B01 /* QBOrderView.m */; };
+		695C77401D6B006600B34B01 /* QBOverlayView.h in Headers */ = {isa = PBXBuildFile; fileRef = 695C773E1D6B006600B34B01 /* QBOverlayView.h */; };
+		695C77411D6B006600B34B01 /* QBOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 695C773F1D6B006600B34B01 /* QBOverlayView.m */; };
 		790A850F1AE7D4D9008E2A80 /* QBSlomoIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = 790A850D1AE7D4D9008E2A80 /* QBSlomoIconView.h */; };
 		790A85101AE7D4D9008E2A80 /* QBSlomoIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 790A850E1AE7D4D9008E2A80 /* QBSlomoIconView.m */; };
 		AA3AD06F1ACF9A3A00BF523E /* QBVideoIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = AA3AD06D1ACF9A3A00BF523E /* QBVideoIconView.h */; };
@@ -81,6 +85,10 @@
 
 /* Begin PBXFileReference section */
 		07A50A481B331A840010E048 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/QBImagePicker.strings; sourceTree = "<group>"; };
+		695C773A1D6AF0EC00B34B01 /* QBOrderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBOrderView.h; sourceTree = "<group>"; };
+		695C773B1D6AF0EC00B34B01 /* QBOrderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBOrderView.m; sourceTree = "<group>"; };
+		695C773E1D6B006600B34B01 /* QBOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBOverlayView.h; sourceTree = "<group>"; };
+		695C773F1D6B006600B34B01 /* QBOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBOverlayView.m; sourceTree = "<group>"; };
 		74BB93661B2CE91A0044EB60 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/QBImagePicker.strings; sourceTree = "<group>"; };
 		790A850D1AE7D4D9008E2A80 /* QBSlomoIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBSlomoIconView.h; sourceTree = "<group>"; };
 		790A850E1AE7D4D9008E2A80 /* QBSlomoIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBSlomoIconView.m; sourceTree = "<group>"; };
@@ -167,8 +175,12 @@
 				AAF1CA191ACE5467005F6295 /* QBAlbumCell.m */,
 				AAF1CA311ACE6FB5005F6295 /* QBAssetCell.h */,
 				AAF1CA321ACE6FB5005F6295 /* QBAssetCell.m */,
+				695C773E1D6B006600B34B01 /* QBOverlayView.h */,
+				695C773F1D6B006600B34B01 /* QBOverlayView.m */,
 				AABBF08E1ACEDDFF003188A3 /* QBCheckmarkView.h */,
 				AABBF08F1ACEDDFF003188A3 /* QBCheckmarkView.m */,
+				695C773A1D6AF0EC00B34B01 /* QBOrderView.h */,
+				695C773B1D6AF0EC00B34B01 /* QBOrderView.m */,
 				AA3AD06D1ACF9A3A00BF523E /* QBVideoIconView.h */,
 				AA3AD06E1ACF9A3A00BF523E /* QBVideoIconView.m */,
 				790A850D1AE7D4D9008E2A80 /* QBSlomoIconView.h */,
@@ -325,6 +337,8 @@
 				AA3AD06F1ACF9A3A00BF523E /* QBVideoIconView.h in Headers */,
 				AAA8FE091ACDA079002A9710 /* QBImagePicker.h in Headers */,
 				AABBF0901ACEDDFF003188A3 /* QBCheckmarkView.h in Headers */,
+				695C77401D6B006600B34B01 /* QBOverlayView.h in Headers */,
+				695C773C1D6AF0EC00B34B01 /* QBOrderView.h in Headers */,
 				AAA8FE211ACDA090002A9710 /* QBImagePickerController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -496,6 +510,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				695C773D1D6AF0EC00B34B01 /* QBOrderView.m in Sources */,
 				AAF1CA341ACE6FB5005F6295 /* QBAssetCell.m in Sources */,
 				AA3AD0701ACF9A3A00BF523E /* QBVideoIconView.m in Sources */,
 				790A85101AE7D4D9008E2A80 /* QBSlomoIconView.m in Sources */,
@@ -503,6 +518,7 @@
 				AAF1CA301ACE6E46005F6295 /* QBAssetsViewController.m in Sources */,
 				AAF1CA1B1ACE5467005F6295 /* QBAlbumCell.m in Sources */,
 				AAA8FE221ACDA090002A9710 /* QBImagePickerController.m in Sources */,
+				695C77411D6B006600B34B01 /* QBOverlayView.m in Sources */,
 				AA3AD0741ACFA06700BF523E /* QBVideoIndicatorView.m in Sources */,
 				AAA8FE5C1ACDA554002A9710 /* QBAlbumsViewController.m in Sources */,
 			);
