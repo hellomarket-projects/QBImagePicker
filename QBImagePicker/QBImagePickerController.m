@@ -74,4 +74,9 @@
     self.albumsNavigationController = navigationController;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return [UIApplication sharedApplication].statusBarStyle;
+}
+
 @end

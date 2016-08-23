@@ -140,6 +140,11 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return [UIApplication sharedApplication].statusBarStyle;
+}
+
 - (void)dealloc
 {
     // Deregister observer
