@@ -73,8 +73,10 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [self setUpToolbarItems];
+
+    if (self.imagePickerController.showsNumberOfSelectedAssetsOnToolbar) {
+        [self setUpToolbarItems];
+    }
     [self resetCachedAssets];
     
     // Register observer
@@ -221,9 +223,17 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         }
         
         NSString *title = [NSString stringWithFormat:format, selectedAssets.count];
-        [(UIBarButtonItem *)self.toolbarItems[1] setTitle:title];
+        if (self.imagePickerController.showsNumberOfSelectedAssetsOnToolbar) {
+            [(UIBarButtonItem *)self.toolbarItems[1] setTitle:title];
+        } else {
+            self.navigationItem.title = title;
+        }
     } else {
-        [(UIBarButtonItem *)self.toolbarItems[1] setTitle:@""];
+        if (self.imagePickerController.showsNumberOfSelectedAssetsOnToolbar) {
+            [(UIBarButtonItem *)self.toolbarItems[1] setTitle:@""];
+        } else {
+            self.navigationItem.title = self.assetCollection.localizedTitle;
+        }
     }
 }
 
@@ -604,7 +614,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         if (imagePickerController.showsNumberOfSelectedAssets) {
             [self updateSelectionInfo];
             
-            if (selectedAssets.count == 1) {
+            if (self.imagePickerController.showsNumberOfSelectedAssetsOnToolbar
+                && selectedAssets.count == 1) {
                 // Show toolbar
                 [self.navigationController setToolbarHidden:NO animated:YES];
             }
@@ -645,7 +656,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     if (imagePickerController.showsNumberOfSelectedAssets) {
         [self updateSelectionInfo];
         
-        if (selectedAssets.count == 0) {
+        if (self.imagePickerController.showsNumberOfSelectedAssetsOnToolbar
+            && selectedAssets.count == 0) {
             // Hide toolbar
             [self.navigationController setToolbarHidden:YES animated:YES];
         }
