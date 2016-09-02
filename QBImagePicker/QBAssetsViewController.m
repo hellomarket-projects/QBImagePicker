@@ -399,37 +399,80 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         PHFetchResultChangeDetails *collectionChanges = [changeInstance changeDetailsForFetchResult:self.fetchResult];
-        
         if (collectionChanges) {
-            // Get the new fetch result
-            self.fetchResult = [collectionChanges fetchResultAfterChanges];
-            
-            if (![collectionChanges hasIncrementalChanges] || [collectionChanges hasMoves]) {
-                // We need to reload all if the incremental diffs are not available
-                [self.collectionView reloadData];
+
+            // Get the new fetch result for future change tracking.
+            self.fetchResult = collectionChanges.fetchResultAfterChanges;
+
+            if (collectionChanges.hasIncrementalChanges)  {
+                NSIndexSet *removed = collectionChanges.removedIndexes;
+                NSIndexSet *inserted = collectionChanges.insertedIndexes;
+                NSIndexSet *changed = collectionChanges.changedIndexes;
+
+                __block BOOL shouldReload = NO;
+
+                if (changed.count && removed.count) {
+                    [changed enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                        if ([removed containsIndex:idx]) {
+                            shouldReload = YES;
+                            *stop = YES;
+                        }
+                    }];
+                }
+
+                if (removed.lastIndex >= self.fetchResult.count) {
+                    shouldReload = YES;
+                }
+
+                if (shouldReload) {
+                    [self.collectionView reloadData];
+                } else {
+                    // Tell the collection view to animate insertions/deletions/moves
+                    // and to refresh any cells that have changed content.
+                    [self.collectionView performBatchUpdates:^{
+                        if (removed.count) {
+                            [self.collectionView deleteItemsAtIndexPaths:[self indexPathsFromIndexSet:removed]];
+                        }
+                        if (inserted.count) {
+                            [self.collectionView insertItemsAtIndexPaths:[self indexPathsFromIndexSet:inserted]];
+                        }
+                        if (changed.count) {
+                            [self.collectionView reloadItemsAtIndexPaths:[self indexPathsFromIndexSet:changed]];
+                        }
+                        if (collectionChanges.hasMoves) {
+                            [collectionChanges enumerateMovesWithBlock:^(NSUInteger fromIndex, NSUInteger toIndex) {
+                                NSIndexPath *fromIndexPath = [NSIndexPath indexPathForItem:fromIndex inSection:0];
+                                NSIndexPath *toIndexPath = [NSIndexPath indexPathForItem:toIndex inSection:0];
+                                [self.collectionView moveItemAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
+                            }];
+                        }
+
+                    } completion:nil];
+                }
+
+                [self resetCachedAssets];
             } else {
-                // If we have incremental diffs, tell the collection view to animate insertions and deletions
-                [self.collectionView performBatchUpdates:^{
-                    NSIndexSet *removedIndexes = [collectionChanges removedIndexes];
-                    if ([removedIndexes count]) {
-                        [self.collectionView deleteItemsAtIndexPaths:[removedIndexes qb_indexPathsFromIndexesWithSection:0]];
-                    }
-                    
-                    NSIndexSet *insertedIndexes = [collectionChanges insertedIndexes];
-                    if ([insertedIndexes count]) {
-                        [self.collectionView insertItemsAtIndexPaths:[insertedIndexes qb_indexPathsFromIndexesWithSection:0]];
-                    }
-                    
-                    NSIndexSet *changedIndexes = [collectionChanges changedIndexes];
-                    if ([changedIndexes count]) {
-                        [self.collectionView reloadItemsAtIndexPaths:[changedIndexes qb_indexPathsFromIndexesWithSection:0]];
-                    }
-                } completion:NULL];
+                // Detailed change information is not available;
+                // repopulate the UI from the current fetch result.
+                [self.collectionView reloadData];
             }
-            
-            [self resetCachedAssets];
         }
     });
+}
+
+- (NSArray *)indexPathsFromIndexSet:(NSIndexSet *)indexSet
+{
+    if (indexSet == nil) {
+        return nil;
+    }
+
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        [indexPaths addObject:[NSIndexPath indexPathForItem:idx inSection:0]];
+    }];
+    
+    return indexPaths;
 }
 
 
