@@ -27,6 +27,7 @@
 {
     QBImagePickerController *imagePickerController = [QBImagePickerController new];
     imagePickerController.delegate = self;
+    imagePickerController.dataSource = self;
     imagePickerController.mediaType = QBImagePickerMediaTypeAny;
     imagePickerController.allowsMultipleSelection = (indexPath.section == 1);
     imagePickerController.showsNumberOfSelectedAssets = YES;
@@ -79,6 +80,16 @@
     NSLog(@"Canceled.");
     
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+#pragma mark - QBImagePickerControllerDataSource
+
+- (UIView *)qb_assetViewControllerGuideView
+{
+    UIView *guideView = [UIView new];
+    [guideView setFrame:CGRectMake(0, 0, 100, 104)];
+    [guideView setBackgroundColor: [UIColor blueColor]];
+    return guideView;
 }
 
 @end

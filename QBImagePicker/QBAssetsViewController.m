@@ -54,7 +54,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 @end
 
-@interface QBAssetsViewController () <PHPhotoLibraryChangeObserver, UICollectionViewDelegateFlowLayout>
+@interface QBAssetsViewController () <PHPhotoLibraryChangeObserver, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *doneButton;
 
@@ -66,9 +66,32 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 @property (nonatomic, assign) BOOL disableScrollToBottom;
 @property (nonatomic, strong) NSIndexPath *lastSelectedItemIndexPath;
 
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIView *topView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewHeightLayout;
+
 @end
 
 @implementation QBAssetsViewController
+
+- (void)loadView
+{
+    [super loadView];
+
+    if ([self.imagePickerController.dataSource respondsToSelector:@selector(qb_assetViewControllerGuideView)]) {
+        UIView *guideView = [self.imagePickerController.dataSource qb_assetViewControllerGuideView];
+
+        self.topViewHeightLayout.constant = guideView.bounds.size.height;
+        [self.topView addSubview:guideView];
+    } else {
+        [self.topView setHidden:TRUE];
+    }
+    UINib* assetCellNib = [UINib nibWithNibName:@"QBAssetCell" bundle:nil];
+    [self.collectionView registerNib:assetCellNib forCellWithReuseIdentifier:@"AssetCell"];
+
+    UINib* footerViewNib = [UINib nibWithNibName:@"QBFooterView" bundle:nil];
+    [self.collectionView registerNib:footerViewNib forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
+}
 
 - (void)viewDidLoad
 {
@@ -134,8 +157,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     NSIndexPath *indexPath = [[self.collectionView indexPathsForVisibleItems] lastObject];
     
     // Update layout
-    [self.collectionViewLayout invalidateLayout];
-    
+    [self.collectionView.collectionViewLayout invalidateLayout];
+
     // Restore scroll position
     [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
@@ -332,7 +355,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         NSArray *assetsToStartCaching = [self assetsAtIndexPaths:addedIndexPaths];
         NSArray *assetsToStopCaching = [self assetsAtIndexPaths:removedIndexPaths];
         
-        CGSize itemSize = [(UICollectionViewFlowLayout *)self.collectionViewLayout itemSize];
+        CGSize itemSize = [(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout itemSize];
         CGSize targetSize = CGSizeScale(itemSize, [[UIScreen mainScreen] scale]);
         
         [self.imageManager startCachingImagesForAssets:assetsToStartCaching
