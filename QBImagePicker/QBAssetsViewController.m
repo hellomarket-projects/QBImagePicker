@@ -74,9 +74,14 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 @implementation QBAssetsViewController
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
+    [super viewDidLoad];
+
+    if (self.imagePickerController.showsNumberOfSelectedAssetsOnToolbar) {
+        [self setUpToolbarItems];
+    }
+    [self resetCachedAssets];
 
     if ([self.imagePickerController.dataSource respondsToSelector:@selector(qb_assetViewControllerGuideView)]) {
         UIView *guideView = [self.imagePickerController.dataSource qb_assetViewControllerGuideView];
@@ -86,21 +91,12 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     } else {
         [self.topView setHidden:TRUE];
     }
-    UINib* assetCellNib = [UINib nibWithNibName:@"QBAssetCell" bundle:nil];
+
+    UINib* assetCellNib = [UINib nibWithNibName:@"QBAssetCell" bundle:self.imagePickerController.assetBundle];
     [self.collectionView registerNib:assetCellNib forCellWithReuseIdentifier:@"AssetCell"];
 
-    UINib* footerViewNib = [UINib nibWithNibName:@"QBFooterView" bundle:nil];
+    UINib* footerViewNib = [UINib nibWithNibName:@"QBFooterView" bundle:self.imagePickerController.assetBundle];
     [self.collectionView registerNib:footerViewNib forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    if (self.imagePickerController.showsNumberOfSelectedAssetsOnToolbar) {
-        [self setUpToolbarItems];
-    }
-    [self resetCachedAssets];
     
     // Register observer
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
@@ -522,6 +518,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     QBAssetCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"AssetCell" forIndexPath:indexPath];
+
     cell.tag = indexPath.item;
     cell.showsOverlayViewWhenSelected = self.imagePickerController.allowsMultipleSelection;
     if (self.imagePickerController.showsOrderOfSelectedAssets) {
