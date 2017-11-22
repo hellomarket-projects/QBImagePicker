@@ -86,9 +86,11 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     } else {
         [self.topView setHidden:TRUE];
     }
+    UINib* assetCellNib = [UINib nibWithNibName:@"QBAssetCell" bundle:nil];
+    [self.collectionView registerNib:assetCellNib forCellWithReuseIdentifier:@"AssetCell"];
 
-    [self.collectionView registerClass:[QBAssetCell class] forCellWithReuseIdentifier:@"AssetCell"];
-    [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
+    UINib* footerViewNib = [UINib nibWithNibName:@"QBFooterView" bundle:nil];
+    [self.collectionView registerNib:footerViewNib forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
 }
 
 - (void)viewDidLoad
