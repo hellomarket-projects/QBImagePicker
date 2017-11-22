@@ -22,5 +22,7 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진 등록을 위해 사용합니다.</string>
 </dict>
 </plist>
