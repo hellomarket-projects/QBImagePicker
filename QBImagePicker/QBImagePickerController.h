@@ -23,6 +23,13 @@
 
 @end
 
+@protocol QBImagePickerControllerDataSource <NSObject>
+
+@optional
+- (UIView *)qb_assetViewControllerGuideView;
+
+@end
+
 typedef NS_ENUM(NSUInteger, QBImagePickerMediaType) {
     QBImagePickerMediaTypeAny = 0,
     QBImagePickerMediaTypeImage,
@@ -32,6 +39,7 @@ typedef NS_ENUM(NSUInteger, QBImagePickerMediaType) {
 @interface QBImagePickerController : UIViewController
 
 @property (nonatomic, weak) id<QBImagePickerControllerDelegate> delegate;
+@property (nonatomic, weak) id<QBImagePickerControllerDataSource> dataSource;
 
 @property (nonatomic, strong, readonly) NSMutableOrderedSet *selectedAssets;
 
