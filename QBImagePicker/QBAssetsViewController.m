@@ -514,7 +514,13 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         numberOfColumns = self.imagePickerController.numberOfColumnsInLandscape;
     }
 
-    CGFloat width = (CGRectGetWidth(self.view.frame) - 2.0 * (numberOfColumns - 1)) / numberOfColumns;
+    CGFloat imageSpacing = 2.0;
+
+    if (numberOfColumns == 3) {
+        imageSpacing = 3.0;
+    }
+
+    CGFloat width = (CGRectGetWidth(self.view.frame) - imageSpacing * (numberOfColumns - 1)) / numberOfColumns;
 
     return CGSizeMake(width, width);
 }
