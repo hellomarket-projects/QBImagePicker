@@ -520,6 +520,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         imageSpacing = 3.0;
     }
 
+    ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).minimumLineSpacing = imageSpacing;
     CGFloat width = (CGRectGetWidth(self.view.frame) - imageSpacing * (numberOfColumns - 1)) / numberOfColumns;
 
     return CGSizeMake(width, width);
