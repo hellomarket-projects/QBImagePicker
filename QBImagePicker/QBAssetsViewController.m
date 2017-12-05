@@ -92,6 +92,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         [self.topView setHidden:YES];
     }
 
+    self.collectionView.contentInset = UIEdgeInsetsMake(3, 0, 0, 0);
+
     UINib* assetCellNib = [UINib nibWithNibName:@"QBAssetCell" bundle:self.imagePickerController.assetBundle];
     [self.collectionView registerNib:assetCellNib forCellWithReuseIdentifier:@"AssetCell"];
 
