@@ -63,7 +63,6 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
 @property (nonatomic, assign) CGRect previousPreheatRect;
 
-@property (nonatomic, assign) BOOL disableScrollToBottom;
 @property (nonatomic, strong) NSIndexPath *lastSelectedItemIndexPath;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -91,8 +90,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     } else {
         [self.topView setHidden:YES];
     }
-
-    self.collectionView.contentInset = UIEdgeInsetsMake(3, 0, 0, 0);
+    self.collectionView.contentInset = UIEdgeInsetsMake(3, 3, 3, 3);
 
     UINib* assetCellNib = [UINib nibWithNibName:@"QBAssetCell" bundle:self.imagePickerController.assetBundle];
     [self.collectionView registerNib:assetCellNib forCellWithReuseIdentifier:@"AssetCell"];
@@ -136,27 +134,16 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     [self updateDoneButtonState];
     [self updateSelectionInfo];
     [self.collectionView reloadData];
-
-    // Scroll to bottom
-    if (self.fetchResult.count > 0 && self.isMovingToParentViewController && !self.disableScrollToBottom) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(self.fetchResult.count - 1) inSection:0];
-        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-
-    self.disableScrollToBottom = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
-    self.disableScrollToBottom = NO;
-
     [self updateCachedAssets];
 }
 
@@ -521,10 +508,9 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     if (numberOfColumns == 3) {
         imageSpacing = 3.0;
     }
-
+    CGFloat sideInset = self.collectionView.contentInset.left + self.collectionView.contentInset.right;
     ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).minimumLineSpacing = imageSpacing;
-    CGFloat width = (CGRectGetWidth(self.view.frame) - imageSpacing * (numberOfColumns - 1)) / numberOfColumns;
-
+    CGFloat width = (CGRectGetWidth(self.view.frame) - sideInset - imageSpacing * (numberOfColumns - 1)) / numberOfColumns;
     return CGSizeMake(width, width);
 }
 
