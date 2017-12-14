@@ -664,7 +664,14 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         return YES;
     }
 
-    return ![self isMaximumSelectionLimitReached];
+    BOOL result = ![self isMaximumSelectionLimitReached];
+    if (result) {
+        NSLog(@"true");
+    } else {
+        NSLog(@"false");
+        [self.imagePickerController.delegate qb_imagePickerController:self.imagePickerController showToastMessage:@"더 이상 선택할 수 없습니다. "];
+    }
+    return result;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
