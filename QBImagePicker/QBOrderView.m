@@ -25,7 +25,7 @@
     self.checkmarkLineWidth = 1.2;
 
     self.borderColor = [UIColor whiteColor];
-    self.bodyColor = [UIColor colorWithRed:(20.0 / 255.0) green:(111.0 / 255.0) blue:(223.0 / 255.0) alpha:1.0];
+    self.bodyColor = [UIColor colorWithDisplayP3Red: 0.000 green: 0.745 blue: 0.800 alpha: 1.0];
     self.textColor = [UIColor whiteColor];
 
     // Set shadow
